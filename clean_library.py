@@ -29,9 +29,10 @@ include_this_entry = True
 ids_seen = set()
 
 start_entry_re = re.compile('@\w+{(?P<id>\w+),')
-exclude_line_re = re.compile('^(month|url|abstract|file|eprint|keywords)')
+exclude_line_re = re.compile('^(month|url|abstract|file|eprint|keywords|Automatically generated|Any changes|BibTeX export options)')
+# exclude_annote_re = re.compile(r"annote = \{\s*.*\}")
 
-print "Cleaned! Just like that!\n"
+print("Cleaned! Just like that!\n")
 
 
 for line in inp:

@@ -12,25 +12,40 @@ Dave Kleinschmidt, 2015
 
 import sys
 import re
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-i',type=str)
+parser.add_argument('-o',type=str)
+args = parser.parse_args()
+
+input_path = args.i
+output_path = args.o
+
+out = open(output_path,'a+')
+inp = open(input_path,'r')
 
 include_this_entry = True
 ids_seen = set()
 
 start_entry_re = re.compile('@\w+{(?P<id>\w+),')
-exclude_line_re = re.compile('^(month|url)')
+exclude_line_re = re.compile('^(month|url|abstract|file|eprint|keywords)')
 
 print "Cleaned! Just like that!\n"
 
-for line in sys.stdin:
+
+for line in inp:
     m = start_entry_re.match(line)
     if m:
         ## start of new entry. check for dupe
         if m.group('id') in ids_seen:
             include_this_entry = False
-            sys.stderr.write('Duplicate ID: ' + m.group('id') + '\n')
+            out.write('Duplicate ID: ' + m.group('id') + '\n')
         else:
             include_this_entry = True
             ids_seen.add(m.group('id'))
     if include_this_entry:
         if not exclude_line_re.match(line):
-            sys.stdout.write(line)
+            out.write(line)
+inp.close()
+out.close()
